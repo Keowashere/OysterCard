@@ -14,30 +14,31 @@ describe OysterCard do
        expect{ subject.top_up(100) }.to raise_error(RuntimeError, "Error, Maximum card limit of £90")
      end
   end
-  describe "#deduct" do
-    it "deduct the amount entered from balance" do
-      subject.top_up(30)
-      subject.deduct(20)
-      expect(subject.balance).to eq(10)
-    end
-  end
+
   describe "#in_journey?" do
     it "return the state" do
       expect(subject.in_journey?).to eq(nil)
     end
   end
   describe "#touch_in" do
+    let(:entry_station) {double :entry_station}
     it "switches the state of use to in_journey?" do
-    subject.top_up(30)
-      subject.touch_in
+      subject.top_up(30)
+      subject.touch_in(:entry_station)
       expect(subject.in_journey?).to eq(true)
     end
+    it "know where I've travelled from" do
+    subject.top_up(30)
+    subject.touch_in(entry_station)
+    expect(subject.entry_station).to eq(entry_station)
+    end
     it "raises an error if balance is less than MIN" do
-      expect{ subject.touch_in }.to raise_error(RuntimeError, "Error, Insufficient Funds")
+      expect{ subject.touch_in(:entry_station) }.to raise_error(RuntimeError, "Error, Insufficient Funds")
     end
   end
   describe "#touch_out" do
-    it "switches the state of use to not in_journey?"do
+
+    it "switches the state of use to not in_journey?" do
       subject.touch_out
       expect(subject.in_journey?).to eq(false)
     end
@@ -46,4 +47,4 @@ describe OysterCard do
       expect { subject.touch_out}.to change{subject.balance}.by(-OysterCard::MIN)
     end
   end
-    end
+end
