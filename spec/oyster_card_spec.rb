@@ -38,13 +38,22 @@ describe OysterCard do
   end
   describe "#touch_out" do
 
+    let (:entry_station) {double :station}
+    let (:exit_station) {double :station}
+    it "it stores entry and exits stations" do
+      subject.top_up(10)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+    expect(subject.exit_station).to eq entry_station
+    end
+
     it "switches the state of use to not in_journey?" do
-      subject.touch_out
-      expect(subject.in_journey?).to eq(false)
+      subject.touch_out(:exit_station)
+    expect(subject.in_journey?).to eq(false)
     end
     it "deducts the fare from the balance" do
       subject.top_up(30)
-      expect { subject.touch_out}.to change{subject.balance}.by(-OysterCard::MIN)
+    expect { subject.touch_out(:exit_station)}.to change{subject.balance}.by(-OysterCard::MIN)
     end
   end
 end
