@@ -17,7 +17,7 @@ describe OysterCard do
 
   describe "#in_journey?" do
     it "return the state" do
-      expect(subject.in_journey?).to eq(nil)
+      expect(subject.in_journey).to eq(false)
     end
   end
   describe "#touch_in" do
@@ -25,7 +25,7 @@ describe OysterCard do
     it "switches the state of use to in_journey?" do
       subject.top_up(30)
       subject.touch_in(:entry_station)
-      expect(subject.in_journey?).to eq(true)
+      expect(subject.in_journey).to eq(true)
     end
     it "know where I've travelled from" do
     subject.top_up(30)
@@ -40,7 +40,7 @@ describe OysterCard do
 
     it "switches the state of use to not in_journey?" do
       subject.touch_out
-      expect(subject.in_journey?).to eq(false)
+      expect(subject.in_journey).to eq(false)
     end
     it "deducts the fare from the balance" do
       subject.top_up(30)
